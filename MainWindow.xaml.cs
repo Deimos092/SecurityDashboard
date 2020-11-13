@@ -30,9 +30,6 @@ namespace SecurityDashboard
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 
-
-
-
 		// ---------------------- Simple methods ----------------------
 		#region----------- Simple methods (close/maximize/minimize and etc.) -----------
 		void PnMouseMove(object sender, MouseEventArgs e)

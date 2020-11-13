@@ -14,7 +14,6 @@ namespace SecurityDashboard.Utils
 		{
 			Service.CreateLog = () => Debug.Create();
 			Service.CreateExeptionHandler = () => ExceptionHandler.Create();
-
 		}
 	}
 }
