@@ -14,6 +14,7 @@ namespace SecurityDashboard.Utils
 		{
 			Service.CreateLog = () => Debug.Create();
 			Service.CreateExeptionHandler = () => ExceptionHandler.Create();
+			Service.CreateJSONReader = () => new JSONReader();
 		}
 	}
 }

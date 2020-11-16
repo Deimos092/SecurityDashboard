@@ -6,32 +6,25 @@ using System.Threading.Tasks;
 
 namespace SecurityDashboard.Model
 {
-	class SmokeSensor : Sensor
+	public class SmokeSensor : Sensor
 	{
 		int _smokelevel;
-		double _temperature;
 
 		public SmokeSensor()
 		{ }
 
-		public SmokeSensor(string name, double temp, int smokelevel) : base(name)
+		public SmokeSensor(string name,int smokelevel) : base(name)
 		{
-			SmokeLevel = smokelevel;
-			Temperature = temp;
+			Level = smokelevel;
 		}
 
-		public double Temperature
-		{
-			get { return Temperature; }
-			set
-			{
-				if (value >= -30 && value <= 55)
-					_temperature = value;
-				else
-					_temperature = double.NaN;
-			}
-		}
-		public int SmokeLevel
+		public static int MaxTemp { get => 55; }
+
+		public static int MinTemp { get => -30; }
+		
+		public static double CriticalLevel { get => 75; }
+
+		public int Level
 		{
 			get { return _smokelevel; }
 			set
@@ -45,7 +38,7 @@ namespace SecurityDashboard.Model
 
 		public override string ToString()
 		{
-			string result = string.Format($"{Name} {Temperature} {SmokeLevel}");
+			string result = string.Format($"{Name} {string.Join(" ", Temperature)} {Level}");
 			return result;
 		}
 	}

@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 using SecurityDashboard.Interfaces;
 
 namespace SecurityDashboard.Utils
@@ -18,8 +17,8 @@ namespace SecurityDashboard.Utils
 		public static Func<IExceptionHandler> CreateExeptionHandler { get; set; } = () => throw new NotImplementedException();
 
 		/// <summary>
-		/// Сервис сбора данных
+		/// Сервис сбора и считывание данных
 		/// </summary>
-		//public static Func<IServiceType> CreateGetServiceType { get; set; } = () => throw new NotImplementedException();
+		public static Func<IJSONReader> CreateJSONReader { get; set; } = () => throw new NotImplementedException();
 	}
 }

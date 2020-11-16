@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 using Newtonsoft.Json;
 using SecurityDashboard.Model;
+using SecurityDashboard.Interfaces;
 
 namespace SecurityDashboard.Utils
 {
-	class JSONReader
+	public class JSONReader : IJSONReader
 	{
-		List<Sensor> SensorsCollection = new List<Sensor>();
-		private static readonly string _fileName = "DataJSON.txt";
-		private static string _path = string.Empty;
+		 static JSONReader _instance;
+		
+		 static readonly string _fileName = "DataOfSensors.json";
+		 static string _path = string.Empty;
+
+		ILogService Log => Service.CreateLog();
+		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 		/// <summary>
 		/// Saves the.
@@ -23,11 +25,14 @@ namespace SecurityDashboard.Utils
 		/// <returns>A bool.</returns>
 		public bool Save(List<Sensor> sensorsCollection )
 		{
-			using(StreamWriter streamWriter = new StreamWriter(FileName))
+			using(StreamWriter streamWriter = new StreamWriter(FilePath))
 			{
-				string result = JsonConvert.SerializeObject(SensorsCollection);
+				string result = JsonConvert.SerializeObject(sensorsCollection, Formatting.Indented, new JsonSerializerSettings
+				{
+					TypeNameHandling = TypeNameHandling.All
+				});
 
-				streamWriter.WriteAsync(result);
+				streamWriter.WriteLine(result);
 			}
 			return true;
 		}
@@ -37,17 +42,19 @@ namespace SecurityDashboard.Utils
 		/// </summary>
 		/// <param name="path">The path.</param>
 		/// <returns>A bool.</returns>
-		public bool Read(string path)
+		public List<Sensor> Read(string path)
 		{
 			using (StreamReader streamReader = new StreamReader(path))
 			{
 				string jsonfile = streamReader.ReadToEnd();
 
-				var collection = JsonConvert.DeserializeObject<List<Sensor>>(jsonfile);
+				var collection = JsonConvert.DeserializeObject<List<Sensor>>(jsonfile, new JsonSerializerSettings
+				{
+					TypeNameHandling = TypeNameHandling.Auto
+				});
 
-				SensorsCollection = collection;
+				return collection;
 			}
-			return true;
 		}
 		/// <summary>
 		/// Путь где будут собираться данные программы
@@ -55,17 +62,18 @@ namespace SecurityDashboard.Utils
 		/// Если задано пустое значение или ошибка, то собираться будет по пути
 		/// "C:\Data (название программы)\DataJSON.txt"
 		/// </summary>
-		public string FileName
+		public string FilePath
 		{
 			get
 			{
 				if (string.IsNullOrEmpty(_path))
-					_path = Path.Combine($@"{Directory.GetCurrentDirectory()}\", _fileName);
-				return _path;
+					return _path = Path.Combine($@"{Directory.GetCurrentDirectory()}\", _fileName);
+				else
+					return _path;
 			}
 			set
 			{
-				if (!string.IsNullOrEmpty(_path))
+				if (!string.IsNullOrEmpty(value))
 					_path = string.Format($@"{value}\{_fileName}");
 				else
 					_path = Path.Combine($@"C:\Data ({AppDomain.CurrentDomain.FriendlyName.Replace(".exe", "")})\", _fileName);

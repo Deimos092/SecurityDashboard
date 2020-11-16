@@ -6,37 +6,25 @@ using System.Threading.Tasks;
 
 namespace SecurityDashboard.Model
 {
-	class FireSensor : Sensor
+	public class FireSensor : Sensor
 	{
 		double _temperature;
 
 		public FireSensor()
 		{ }
 
-		public FireSensor(string name, double templevel) : base(name)
+		public FireSensor(string name) : base(name)
 		{
-			Temperature = templevel;
+			
 		}
+		
+		public static int MaxTemp { get => 46; }
 
-
-		/// <summary>
-		/// Gets or sets the temperature.
-		/// </summary>
-		public double Temperature
-		{
-			get { return _temperature; }
-			set
-			{
-				if (value >= -40 && value <= 46)
-					_temperature = value;
-				else
-					_temperature = double.NaN;
-			}
-		}
+		public static int MinTemp { get => -40; }
 
 		public override string ToString()
 		{
-			string result = string.Format($"{Name} {Temperature}");
+			string result = string.Format($"{Name} {string.Join(" ",Temperature)}");
 			return result;
 		}
 	}

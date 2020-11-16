@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SecurityDashboard.Interfaces;
+
 namespace SecurityDashboard.Model
 {
-	abstract class Sensor
+	public abstract class Sensor : ISensor
 	{
 		string _name;
-		double _temperature;
+		List<double> _temperatures;
+		
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Alarm"/> class.
@@ -17,25 +20,16 @@ namespace SecurityDashboard.Model
 		public Sensor()
 		{
 			_name = string.Empty;
-			_temperature = 0;
+			_temperatures = new List<double>();
 		}
-
-		public Sensor(string name)
-		{
-			Name = name;
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Alarm"/> class.
 		/// </summary>
 		/// <param name="name">Имя датчика</param>
-		/// <param name="temp">Температура</param>
-		public Sensor(string name, double temp)
+		public Sensor(string name)
 		{
 			Name = name;
-			Temperature = temp;
 		}
-
 		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>
@@ -48,15 +42,15 @@ namespace SecurityDashboard.Model
 		/// <summary>
 		/// Gets or sets the temperature.
 		/// </summary>
-		public double Temperature
+		public List<double> Temperature
 		{
-			get { return _temperature; }
+			get { return _temperatures; }
 			set 
 			{
-				if (value >= -50 && value <= 100)
-					_temperature = value;
+				if (value != null)
+					_temperatures = value;
 				else
-					_temperature = double.NaN;
+					_temperatures = new List<double>();
 			}
 		}
 

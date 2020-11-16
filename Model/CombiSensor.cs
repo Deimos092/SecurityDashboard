@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SecurityDashboard.Model
 {
-	class CombiSensor : Sensor
+	public class CombiSensor : Sensor
 	{
 		double _carbonMonoxid;
 		double _temperature;
@@ -16,24 +16,16 @@ namespace SecurityDashboard.Model
 
 		}
 
-		public CombiSensor(double carbonLevel, double temp, string name):base(name)
+		public CombiSensor(string name, double carbonLevel) :base(name)
 		{
 			CarbonMonoxidLevel = carbonLevel;
-			Temperature = temp;
 		}
 
+		public static int MaxTemp { get => 50; }
 
-		public double Temperature
-		{
-			get { return _temperature; }
-			set
-			{
-				if (value >= -10 && value <= 50)
-					_temperature = value;
-				else
-					_temperature = double.NaN;
-			}
-		}
+		public static int MinTemp { get => -10; }
+
+		public static double CriticalLevel { get => 50001.0; }
 
 		public double CarbonMonoxidLevel
 		{
