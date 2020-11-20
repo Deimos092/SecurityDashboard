@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SecurityDashboard.Interfaces;
+using SecurityDashboard.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,8 @@ namespace SecurityDashboard.Model
 	{
 		double _carbonMonoxid;
 		double _temperature;
-
+		ILogService Log => Service.CreateLog();
+		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 		public CombiSensor()
 		{
 
@@ -18,7 +21,7 @@ namespace SecurityDashboard.Model
 
 		public CombiSensor(string name, double carbonLevel) :base(name)
 		{
-			CarbonMonoxidLevel = carbonLevel;
+			Level = carbonLevel;
 		}
 
 		public static int MaxTemp { get => 50; }
@@ -27,7 +30,7 @@ namespace SecurityDashboard.Model
 
 		public static double CriticalLevel { get => 50001.0; }
 
-		public double CarbonMonoxidLevel
+		public double Level
 		{
 			get { return _carbonMonoxid; }
 			set

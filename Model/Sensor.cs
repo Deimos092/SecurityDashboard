@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SecurityDashboard.Interfaces;
+using SecurityDashboard.Utils;
 
 namespace SecurityDashboard.Model
 {
@@ -12,7 +13,8 @@ namespace SecurityDashboard.Model
 	{
 		string _name;
 		List<double> _temperatures;
-		
+		ILogService Log => Service.CreateLog();
+		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Alarm"/> class.

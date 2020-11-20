@@ -1,4 +1,5 @@
-﻿using SecurityDashboard.Model;
+﻿using SecurityDashboard.Interfaces;
+using SecurityDashboard.Model;
 
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,17 @@ namespace SecurityDashboard.Utils
 {
 	public class Generator
 	{
-		string Smokename = "Дымовой датчик ";
-		string Firename = "Тепловой датчик ";
-		string Combiname = "Комбинированый датчик ";
-
+		static string Smokename = "Дымовой датчик ";
+		static string Firename = "Тепловой датчик ";
+		static string Combiname = "Комбинированый датчик ";
+		ILogService Log => Service.CreateLog();
+		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 		/// <summary>
 		/// Generates the sensors.
 		/// </summary>
 		/// <param name="size">The size.</param>
 		/// <returns>A list of Sensors.</returns>
-		public List<Sensor> GenerateSensors(int size = 9)
+		public static List<Sensor> GetSensors(int size = 9)
 		{
 			List<Sensor> Collection = new List<Sensor>();
 			
@@ -49,7 +51,7 @@ namespace SecurityDashboard.Utils
 		/// </summary>
 		/// <param name="sensor">The sensor.</param>
 		/// <returns>A list of double.</returns>
-		private List<double> GetCollectionOfTemp(Sensor sensor)
+		private static List<double> GetCollectionOfTemp(Sensor sensor)
 		{
 			Random _rand = new Random();
 

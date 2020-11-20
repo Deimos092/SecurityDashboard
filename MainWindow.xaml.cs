@@ -19,6 +19,7 @@ namespace SecurityDashboard
 		public MainWindow()
 		{
 			InitializeComponent();
+			DataContext = new MainWindow(); 
 		}
 		/// <summary>
 		/// Create Services for work

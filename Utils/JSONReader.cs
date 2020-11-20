@@ -5,6 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 using SecurityDashboard.Model;
 using SecurityDashboard.Interfaces;
+using SecurityDashboard.ViewModel;
 
 namespace SecurityDashboard.Utils
 {
@@ -18,6 +19,16 @@ namespace SecurityDashboard.Utils
 		ILogService Log => Service.CreateLog();
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
+		/// <summary>
+		/// Метод применение паттерна Singleton для инициализации обьекта
+		/// Нужно для того что бы все файлы проходили в одном месте
+		/// И был всего 1 обьект по всей программе
+		/// </summary>
+		/// <returns></returns>
+		public static JSONReader Create()
+		{
+			return _instance ?? (_instance = new JSONReader());
+		}
 		/// <summary>
 		/// Saves the.
 		/// </summary>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SecurityDashboard.Interfaces;
+using SecurityDashboard.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +11,8 @@ namespace SecurityDashboard.Model
 	public class FireSensor : Sensor
 	{
 		double _temperature;
-
+		ILogService Log => Service.CreateLog();
+		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 		public FireSensor()
 		{ }
 
