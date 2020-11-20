@@ -1,20 +1,15 @@
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
-using System.Windows.Input;
 using System.IO;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using SecurityDashboard.Model;
 using SecurityDashboard.Utils;
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using SecurityDashboard.Interfaces;
-using System.ComponentModel;
 
 namespace SecurityDashboard.ViewModel
 {
@@ -119,11 +114,11 @@ namespace SecurityDashboard.ViewModel
 			{
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
-				SmokeSensors = Sensors.Where(x =>
-				{
+				//SmokeSensors = Sensors.Where(x =>
+				//{
 					
 
-				}).ToList();
+				//}).ToList();
 
 				OnPropertyChanged("SmokeSensors");
 				OnPropertyChanged("SmokeSensors");
