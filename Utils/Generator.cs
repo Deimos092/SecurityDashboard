@@ -14,8 +14,7 @@ namespace SecurityDashboard.Utils
 		static string Smokename = "Дымовой датчик ";
 		static string Firename = "Тепловой датчик ";
 		static string Combiname = "Комбинированый датчик ";
-		ILogService Log => Service.CreateLog();
-		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
+
 		/// <summary>
 		/// Generates the sensors.
 		/// </summary>

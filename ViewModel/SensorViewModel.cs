@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System.Collections.Generic;
-
+using System.Collections;
 using SecurityDashboard.Model;
 
 using System;
@@ -19,8 +19,11 @@ namespace SecurityDashboard.ViewModel
 		/// <param name="sensor">The sensor.</param>
 		public SensorViewModel(Sensor sensor)
 		{
+			var time = DateTime.Now;
 			this.sensor = sensor;
-			dateTimes = Enumerable.Range(0, 24).Select(x => DateTime.Parse(x.ToString("HH:mm:ss"))).ToList();
+			dateTimes = Enumerable.Range(0, 24)
+				.Select(hour => new DateTime(time.Year, time.Month, time.Day, hour, 0, 0))
+				.ToList();
 		}
 
 		public string Name => sensor.Name;

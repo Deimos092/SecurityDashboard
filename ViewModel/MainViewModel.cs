@@ -33,6 +33,7 @@ namespace SecurityDashboard.ViewModel
 		/// </summary>
 		public MainViewModel()
 		{
+			ServiceConfig.Initialization();
 			FileManager = JSONReader.Create();
 			Sensors = new ObservableCollection<SensorViewModel>();
 
@@ -65,7 +66,7 @@ namespace SecurityDashboard.ViewModel
 				if (isOk.Value)
 				{
 					List<Sensor> Collection = Sensors.Select(x => x.sensor).ToList();
-					FileManager.FilePath = saveFileDialog.FileName;
+					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
 					FileManager.Save(Collection);
 				}
 				else
@@ -88,14 +89,15 @@ namespace SecurityDashboard.ViewModel
 				openFileDialog.FileName = "Путь до файла";
 				openFileDialog.Title = "Загрузить данные с файла";
 				openFileDialog.FilterIndex = 0;
+				openFileDialog.DefaultExt = FileManager.FilePath;
 				// ------------------------------------
 
 				bool? isOk = openFileDialog.ShowDialog() ?? false;
 				if (isOk.Value)
 				{
 					Sensors.Clear();
-					FileManager.FilePath = openFileDialog.FileName;
-					var collection = FileManager.Read(FileManager.FilePath);
+					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
+					List<Sensor> collection = FileManager.Read(FileManager.FilePath);
 
 					collection.ForEach(x => Sensors.Add(new SensorViewModel(x)));
 				}

@@ -1,6 +1,6 @@
 ﻿using SecurityDashboard.Interfaces;
 using SecurityDashboard.Utils;
-
+using SecurityDashboard.ViewModel;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +19,7 @@ namespace SecurityDashboard
 		public MainWindow()
 		{
 			InitializeComponent();
-			DataContext = new MainWindow(); 
+			this.DataContext = new MainViewModel();
 		}
 		/// <summary>
 		/// Create Services for work

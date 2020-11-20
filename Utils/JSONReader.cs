@@ -16,8 +16,6 @@ namespace SecurityDashboard.Utils
 		 static readonly string _fileName = "DataOfSensors.json";
 		 static string _path = string.Empty;
 
-		ILogService Log => Service.CreateLog();
-		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 		/// <summary>
 		/// Метод применение паттерна Singleton для инициализации обьекта
