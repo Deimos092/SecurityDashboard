@@ -10,12 +10,20 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using SecurityDashboard.Interfaces;
+using LiveCharts;
+using LiveCharts.Configurations;
+using LiveCharts.Defaults;
+using System.Windows.Media;
+using LiveCharts.Wpf;
 
 namespace SecurityDashboard.ViewModel
 {
 
 	public class MainViewModel : BaseViewModel
 	{
+		List<SmokeSensor> smokeSensors;
+		List<FireSensor> fireSensors;
+		List<CombiSensor> combiSensors;
 		ILogService Log => Service.CreateLog();
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
@@ -45,9 +53,26 @@ namespace SecurityDashboard.ViewModel
 
 		private JSONReader FileManager { get; set; }
 
-		public List<SmokeSensor> SmokeSensors { get; set; }
-		public List<FireSensor> FireSensors { get; set; }
-		public List<CombiSensor> CombiSensors { get; set; }
+		public SeriesCollection SmokeSensors { get; set; }
+
+		//public SeriesCollection FireSensors
+		//{
+		//	get { return fireSensors; }
+		//	set
+		//	{
+		//		fireSensors = value;
+		//		OnPropertyChanged("FireSensors");
+		//	}
+		//}
+		//public SeriesCollection CombiSensors
+		//{
+		//	get { return combiSensors; }
+		//	set
+		//	{
+		//		combiSensors = value;
+		//		OnPropertyChanged("CombiSensors");
+		//	}
+		//}
 
 
 		private void SaveCollection()
@@ -114,12 +139,36 @@ namespace SecurityDashboard.ViewModel
 			{
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
-				//SmokeSensors = Sensors.Where(x =>
-				//{
-					
 
-				//}).ToList();
-				
+		//		CartesianMapper<SensorViewModel> mapper = Mappers.Xy<SensorViewModel>()
+		//		 .X((item) => (double)item.DateTimes[11].Ticks / TimeSpan.FromMinutes(5).Ticks)
+		//		 .Y(item => item.Temperature.Max());
+
+		//		var series = new ColumnSeries()
+		//		{
+		//			Configuration = mapper,
+		//			Values = new ChartValues<SmokeSensor>
+	 // {
+		//new SmokeSensor() {Temperature = 10, Value = 100},
+		//new SmokeSensor() {Timestamp = DateTime.Now.AddMinutes(15), Value = 78},
+		//new SmokeSensor() {Timestamp = DateTime.Now.AddMinutes(30), Value = 21}
+	 // }
+		//		};
+
+
+
+				//Sensors
+				//.Where(item => item.sensor.GetType() == typeof(SmokeSensor)).Select(item => (SmokeSensor)item.sensor)
+				//.ToList();
+
+				//FireSensors = Sensors
+				//	.Where(item => item.sensor.GetType() == typeof(FireSensor)).Select(item => (FireSensor)item.sensor)
+				//	.ToList();
+
+				//CombiSensors = Sensors
+				//	 .Where(item => item.sensor.GetType() == typeof(CombiSensor)).Select(item => (CombiSensor)item.sensor)
+				//	 .ToList();
+
 				OnPropertyChanged("FireSensors");
 				OnPropertyChanged("SmokeSensors");
 				OnPropertyChanged("CombiSensors");
@@ -132,6 +181,5 @@ namespace SecurityDashboard.ViewModel
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
-
 	}
 }
