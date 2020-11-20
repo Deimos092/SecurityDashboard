@@ -61,7 +61,7 @@ namespace SecurityDashboard.Utils
 		/// <returns></returns>
 		public string Handler(Exception ex)
 		{
-			return $"\n\t {ex.Message}\n\tSource: {ex.Source}\n\tTarget: {ex.TargetSite}";
+			return $"{ex.Message}\nSource: {ex.Source}\nTarget: {ex.TargetSite}";
 		}
 
 		/// <summary>

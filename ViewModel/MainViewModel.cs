@@ -40,7 +40,6 @@ namespace SecurityDashboard.ViewModel
 			Generate = new RelayCommand(GenerateCollection);
 			SaveFile = new RelayCommand(SaveCollection);
 			ReadFile = new RelayCommand(ReadCollection);
-
 		}
 
 		public RelayCommand Generate { get; set; }
@@ -50,6 +49,11 @@ namespace SecurityDashboard.ViewModel
 		public RelayCommand ReadFile { get; set; }
 
 		private JSONReader FileManager { get; set; }
+
+		public List<SmokeSensor> SmokeSensors { get; set; }
+		public List<FireSensor> FireSensors { get; set; }
+		public List<CombiSensor> CombiSensors { get; set; }
+
 
 		private void SaveCollection()
 		{
@@ -115,6 +119,16 @@ namespace SecurityDashboard.ViewModel
 			{
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
+				SmokeSensors = Sensors.Where(x =>
+				{
+					
+
+				}).ToList();
+
+				OnPropertyChanged("SmokeSensors");
+				OnPropertyChanged("SmokeSensors");
+				OnPropertyChanged("CombiSensors");
+
 			}
 			catch (Exception ex)
 			{
