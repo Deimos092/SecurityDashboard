@@ -149,7 +149,8 @@
 						ChartLegend="{Binding ElementName=FireSensor, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
-						Hoverable="False" />
+						Hoverable="False"
+						Series="{Binding FireSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
 					<lvc:CartesianChart
 						x:Name="SmokeSensor"
@@ -159,7 +160,8 @@
 						ChartLegend="{Binding ElementName=SmokeSensor, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
-						Hoverable="False" />
+						Hoverable="False"
+						Series="{Binding SmokeSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
 					<lvc:CartesianChart
 						x:Name="CarbonSensor"
@@ -169,7 +171,8 @@
 						ChartLegend="{Binding ElementName=CarbonSensor, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
-						Hoverable="False" />
+						Hoverable="False"
+						Series="{Binding CarbonSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
 				</StackPanel>
 			</ScrollViewer>

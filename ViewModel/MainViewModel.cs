@@ -119,8 +119,8 @@ namespace SecurityDashboard.ViewModel
 					
 
 				//}).ToList();
-
-				OnPropertyChanged("SmokeSensors");
+				
+				OnPropertyChanged("FireSensors");
 				OnPropertyChanged("SmokeSensors");
 				OnPropertyChanged("CombiSensors");
 
