@@ -150,7 +150,7 @@
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding SmokeSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 					<lvc:CartesianChart
 						x:Name="SmokeSensor"
@@ -161,7 +161,7 @@
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding FireSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 					<lvc:CartesianChart
 						x:Name="CombiSensor"
@@ -172,7 +172,7 @@
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding CombiSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 				</StackPanel>
 			</ScrollViewer>

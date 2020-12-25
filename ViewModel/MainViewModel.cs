@@ -36,6 +36,7 @@ namespace SecurityDashboard.ViewModel
 
 		public ObservableCollection<CombiSensorViewModel> CombiSensorCollection { get; set; }
 
+		public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
 		/// </summary>
@@ -62,8 +63,6 @@ namespace SecurityDashboard.ViewModel
 		public RelayCommand LoadFile { get; set; }
 
 		private JSONReader FileManager { get; set; }
-
-		public SeriesCollection SeriesSensors { get; set; }
 
 		private void SaveCollection()
 		{
@@ -130,11 +129,14 @@ namespace SecurityDashboard.ViewModel
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
 
-				
-
 				var collection = GetSensorsOfType<SmokeSensor>();
 				foreach (var item in collection)
+				{
 					SmokeSensorCollection.Add(new SmokeSensorViewModel(item as SmokeSensor));
+					SeriesCollection.Add(BuildChartFor(item as SmokeSensor));
+				}
+				OnPropertyChanged("SeriesCollection");
+				SeriesCollection.Clear();
 
 				collection = GetSensorsOfType<FireSensor>();
 				foreach (var item in collection)
@@ -144,7 +146,7 @@ namespace SecurityDashboard.ViewModel
 				foreach (var item in collection)
 					CombiSensorCollection.Add(new CombiSensorViewModel(item as CombiSensor));
 
-				OnPropertyChanged("SmokeSensorCollection");
+				
 				OnPropertyChanged("FireSensorCollection");
 				OnPropertyChanged("CombiSensorCollection");
 			}
@@ -164,19 +166,20 @@ namespace SecurityDashboard.ViewModel
 			return collection;
 		}
 
-		private CartesianChart BuildChartFor(object collection)
+		private ColumnSeries BuildChartFor(Sensor sensor)
 		{
-			ChartValues<ObservablePoint> SeriesPoints = new ChartValues<ObservablePoint>();
-			CartesianChart chart = new CartesianChart();
-			chart.Series = new SeriesCollection
+			CartesianMapper<SensorViewModel> mapper = Mappers.Xy<SensorViewModel>()
+			 .X((item) => 10) // Set interval to 5 minutes
+			 .Y(item => 100)
+			 .Fill((item) => item.Temperatures.Max() > 99 ? Brushes.Red : Brushes.Blue);
+
+			var series = new ColumnSeries
 			{
-				new LineSeries
-				{
-					Title = sensor.Name,
-					Values = new ChartValues<double>(sensor.Temperatures)
-				}
+				Title = sensor.Name,
+				Configuration = mapper,
+				Values = new ChartValues<double>(sensor.Temperatures)
 			};
-			return chart;
+			return series;
 		}
 	}
 }
