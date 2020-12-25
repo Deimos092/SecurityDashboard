@@ -33,9 +33,9 @@ namespace SecurityDashboard.Utils
 					CombiSensor combiSensor = new CombiSensor($"{Combiname}{i}", level.Next(CombiSensor.MinTemp, CombiSensor.MaxTemp));
 					FireSensor fireSensor = new FireSensor($"{Firename}{i}");
 
-					smokeSensor.Temperature = GetCollectionOfTemp(smokeSensor);
-					combiSensor.Temperature = GetCollectionOfTemp(combiSensor);
-					fireSensor.Temperature = GetCollectionOfTemp(fireSensor);
+					smokeSensor.Temperatures = GenTemperatureFor(smokeSensor);
+					combiSensor.Temperatures = GenTemperatureFor(combiSensor);
+					fireSensor.Temperatures = GenTemperatureFor(fireSensor);
 
 					Collection.Add(smokeSensor);
 					Collection.Add(combiSensor);
@@ -45,12 +45,13 @@ namespace SecurityDashboard.Utils
 			return Collection;
 		}
 
+		
 		/// <summary>
 		/// Gets the collection of temp.
 		/// </summary>
 		/// <param name="sensor">The sensor.</param>
 		/// <returns>A list of double.</returns>
-		private static List<double> GetCollectionOfTemp(Sensor sensor)
+		public static List<double> GenTemperatureFor(Sensor sensor)
 		{
 			Random _rand = new Random();
 

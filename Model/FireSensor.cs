@@ -27,7 +27,7 @@ namespace SecurityDashboard.Model
 
 		public override string ToString()
 		{
-			string result = string.Format($"{Name} {string.Join(" ",Temperature)}");
+			string result = string.Format($"{Name} {string.Join(" ",Temperatures)}");
 			return result;
 		}
 	}

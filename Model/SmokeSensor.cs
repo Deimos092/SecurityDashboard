@@ -11,8 +11,6 @@ namespace SecurityDashboard.Model
 	public class SmokeSensor : Sensor
 	{
 		int _smokelevel;
-		ILogService Log => Service.CreateLog();
-		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 		public SmokeSensor()
 		{ }
 
@@ -41,7 +39,7 @@ namespace SecurityDashboard.Model
 
 		public override string ToString()
 		{
-			string result = string.Format($"{Name} {string.Join(" ", Temperature)} {Level}");
+			string result = string.Format($"{Name} {string.Join(" ", Temperatures)} {Level}");
 			return result;
 		}
 	}

@@ -46,7 +46,7 @@
 					x:Name="btnLoad"
 					Width="100"
 					Margin="10,0"
-					Command="{Binding ReadFile}"
+					Command="{Binding LoadFile}"
 					Style="{StaticResource MaterialDesignRaisedLightButton}">
 					_LOAD
 				</Button>
@@ -146,33 +146,33 @@
 						Width="300"
 						Height="{Binding ElementName=MainCharts, Path=Height}"
 						Margin="10"
-						ChartLegend="{Binding ElementName=FireSensor, Path=Name}"
+						ChartLegend="{Binding ElementName=SmokeSensorCollection, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding FireSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+						Series="{Binding SmokeSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 					<lvc:CartesianChart
 						x:Name="SmokeSensor"
 						Height="{Binding ElementName=MainCharts, Path=Height}"
 						MinWidth="300"
 						Margin="10"
-						ChartLegend="{Binding ElementName=SmokeSensor, Path=Name}"
+						ChartLegend="{Binding ElementName=FireSensorCollection, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding SmokeSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+						Series="{Binding FireSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 					<lvc:CartesianChart
-						x:Name="CarbonSensor"
+						x:Name="CombiSensor"
 						Width="300"
 						Height="{Binding ElementName=MainCharts, Path=Height}"
 						Margin="10"
-						ChartLegend="{Binding ElementName=CarbonSensor, Path=Name}"
+						ChartLegend="{Binding ElementName=CombiSensorCollection, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding CarbonSensors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+						Series="{Binding CombiSensorCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
 				</StackPanel>
 			</ScrollViewer>

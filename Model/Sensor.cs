@@ -44,7 +44,7 @@ namespace SecurityDashboard.Model
 		/// <summary>
 		/// Gets or sets the temperature.
 		/// </summary>
-		public List<double> Temperature
+		public List<double> Temperatures
 		{
 			get { return _temperatures; }
 			set 
@@ -58,7 +58,7 @@ namespace SecurityDashboard.Model
 
 		public override string ToString()
 		{
-			string result = string.Format($"{Name} {Temperature}");
+			string result = string.Format($"{Name} {Temperatures}");
 			return result;
 		}
 	}

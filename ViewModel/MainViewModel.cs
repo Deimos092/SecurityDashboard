@@ -21,15 +21,20 @@ namespace SecurityDashboard.ViewModel
 
 	public class MainViewModel : BaseViewModel
 	{
-		List<SmokeSensor> smokeSensors;
-		List<FireSensor> fireSensors;
-		List<CombiSensor> combiSensors;
+		//List<SmokeSensor> smokeSensors;
+		//List<FireSensor> fireSensors;
+		//List<CombiSensor> combiSensors;
+
 		ILogService Log => Service.CreateLog();
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 		OpenFileDialog openFileDialog;
 		SaveFileDialog saveFileDialog;
-		public ObservableCollection<SensorViewModel> Sensors { get; set; }
+		public ObservableCollection<SmokeSensorViewModel> SmokeSensorCollection { get; set; }
+
+		public ObservableCollection<FireSensorViewModel> FireSensorCollection { get; set; }
+
+		public ObservableCollection<CombiSensorViewModel> CombiSensorCollection { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
@@ -38,42 +43,27 @@ namespace SecurityDashboard.ViewModel
 		{
 			ServiceConfig.Initialization();
 			FileManager = JSONReader.Create();
-			Sensors = new ObservableCollection<SensorViewModel>();
+
+			SmokeSensorCollection = new ObservableCollection<SmokeSensorViewModel>();
+			FireSensorCollection = new ObservableCollection<FireSensorViewModel>();
+			CombiSensorCollection = new ObservableCollection<CombiSensorViewModel>();
 
 			Generate = new RelayCommand(GenerateCollection);
 			SaveFile = new RelayCommand(SaveCollection);
-			ReadFile = new RelayCommand(ReadCollection);
+			LoadFile = new RelayCommand(LoadCollection);
 		}
+
+		public List<SensorViewModel> Sensors { get; set; } = new List<SensorViewModel>();
 
 		public RelayCommand Generate { get; set; }
 
 		public RelayCommand SaveFile { get; set; }
 
-		public RelayCommand ReadFile { get; set; }
+		public RelayCommand LoadFile { get; set; }
 
 		private JSONReader FileManager { get; set; }
 
-		public SeriesCollection SmokeSensors { get; set; }
-
-		//public SeriesCollection FireSensors
-		//{
-		//	get { return fireSensors; }
-		//	set
-		//	{
-		//		fireSensors = value;
-		//		OnPropertyChanged("FireSensors");
-		//	}
-		//}
-		//public SeriesCollection CombiSensors
-		//{
-		//	get { return combiSensors; }
-		//	set
-		//	{
-		//		combiSensors = value;
-		//		OnPropertyChanged("CombiSensors");
-		//	}
-		//}
-
+		public SeriesCollection SeriesSensors { get; set; }
 
 		private void SaveCollection()
 		{
@@ -89,7 +79,7 @@ namespace SecurityDashboard.ViewModel
 				bool? isOk = saveFileDialog.ShowDialog() ?? false;
 				if (isOk.Value)
 				{
-					List<Sensor> Collection = Sensors.Select(x => x.sensor).ToList();
+					List<Sensor> Collection = Sensors.Select(x => x.Sensor).ToList();
 					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
 					FileManager.Save(Collection);
 				}
@@ -103,7 +93,7 @@ namespace SecurityDashboard.ViewModel
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
-		private void ReadCollection()
+		private void LoadCollection()
 		{
 			try
 			{
@@ -123,7 +113,7 @@ namespace SecurityDashboard.ViewModel
 					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
 					List<Sensor> collection = FileManager.Read(FileManager.FilePath);
 
-					collection.ForEach(x => Sensors.Add(new SensorViewModel(x)));
+					collection.ForEach(sensor => Sensors.Add(new SensorViewModel(sensor)));
 				}
 			}
 			catch (Exception ex)
@@ -140,39 +130,23 @@ namespace SecurityDashboard.ViewModel
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
 
-		//		CartesianMapper<SensorViewModel> mapper = Mappers.Xy<SensorViewModel>()
-		//		 .X((item) => (double)item.DateTimes[11].Ticks / TimeSpan.FromMinutes(5).Ticks)
-		//		 .Y(item => item.Temperature.Max());
+				
 
-		//		var series = new ColumnSeries()
-		//		{
-		//			Configuration = mapper,
-		//			Values = new ChartValues<SmokeSensor>
-	 // {
-		//new SmokeSensor() {Temperature = 10, Value = 100},
-		//new SmokeSensor() {Timestamp = DateTime.Now.AddMinutes(15), Value = 78},
-		//new SmokeSensor() {Timestamp = DateTime.Now.AddMinutes(30), Value = 21}
-	 // }
-		//		};
+				var collection = GetSensorsOfType<SmokeSensor>();
+				foreach (var item in collection)
+					SmokeSensorCollection.Add(new SmokeSensorViewModel(item as SmokeSensor));
 
+				collection = GetSensorsOfType<FireSensor>();
+				foreach (var item in collection)
+					FireSensorCollection.Add(new FireSensorViewModel(item as FireSensor));
 
+				collection = GetSensorsOfType<CombiSensor>();
+				foreach (var item in collection)
+					CombiSensorCollection.Add(new CombiSensorViewModel(item as CombiSensor));
 
-				//Sensors
-				//.Where(item => item.sensor.GetType() == typeof(SmokeSensor)).Select(item => (SmokeSensor)item.sensor)
-				//.ToList();
-
-				//FireSensors = Sensors
-				//	.Where(item => item.sensor.GetType() == typeof(FireSensor)).Select(item => (FireSensor)item.sensor)
-				//	.ToList();
-
-				//CombiSensors = Sensors
-				//	 .Where(item => item.sensor.GetType() == typeof(CombiSensor)).Select(item => (CombiSensor)item.sensor)
-				//	 .ToList();
-
-				OnPropertyChanged("FireSensors");
-				OnPropertyChanged("SmokeSensors");
-				OnPropertyChanged("CombiSensors");
-
+				OnPropertyChanged("SmokeSensorCollection");
+				OnPropertyChanged("FireSensorCollection");
+				OnPropertyChanged("CombiSensorCollection");
 			}
 			catch (Exception ex)
 			{
@@ -180,6 +154,29 @@ namespace SecurityDashboard.ViewModel
 				Log.WriteLog(log);
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
+		}
+		private List<object> GetSensorsOfType<T>()
+		{
+			var collection = Sensors
+				.Where(item => item.Sensor.GetType() == typeof(T))
+				.Select(item => Convert.ChangeType(item.Sensor, typeof(T)))
+				.ToList();
+			return collection;
+		}
+
+		private CartesianChart BuildChartFor(object collection)
+		{
+			ChartValues<ObservablePoint> SeriesPoints = new ChartValues<ObservablePoint>();
+			CartesianChart chart = new CartesianChart();
+			chart.Series = new SeriesCollection
+			{
+				new LineSeries
+				{
+					Title = sensor.Name,
+					Values = new ChartValues<double>(sensor.Temperatures)
+				}
+			};
+			return chart;
 		}
 	}
 }

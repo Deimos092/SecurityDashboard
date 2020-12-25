@@ -121,8 +121,11 @@
     <Compile Include="Utils\Service.cs" />
     <Compile Include="Utils\ServiceConfig.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\CombiSensor.cs" />
     <Compile Include="ViewModel\SensorViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\FireSensorViewModel.cs" />
+    <Compile Include="ViewModel\SmokeSensorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
