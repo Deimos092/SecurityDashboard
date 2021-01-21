@@ -146,22 +146,22 @@
 						Width="300"
 						Height="{Binding ElementName=MainCharts, Path=Height}"
 						Margin="10"
-						ChartLegend="{Binding ElementName=SmokeSensorCollection, Path=Name}"
+						ChartLegend="{Binding ElementName=FireSensorCollection, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, Mode=OneWay}" />
 
 					<lvc:CartesianChart
 						x:Name="SmokeSensor"
 						Height="{Binding ElementName=MainCharts, Path=Height}"
 						MinWidth="300"
 						Margin="10"
-						ChartLegend="{Binding ElementName=FireSensorCollection, Path=Name}"
+						ChartLegend="{Binding ElementName=SmokeSensorCollection, Path=Name}"
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, Mode=OneWay}" />
 
 					<lvc:CartesianChart
 						x:Name="CombiSensor"
@@ -172,7 +172,7 @@
 						DataTooltip="{x:Null}"
 						DisableAnimations="False"
 						Hoverable="False"
-						Series="{Binding SeriesCollection, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+						Series="{Binding SeriesCollection, Mode=OneWay}" />
 
 				</StackPanel>
 			</ScrollViewer>

@@ -21,9 +21,6 @@ namespace SecurityDashboard.ViewModel
 
 	public class MainViewModel : BaseViewModel
 	{
-		//List<SmokeSensor> smokeSensors;
-		//List<FireSensor> fireSensors;
-		//List<CombiSensor> combiSensors;
 
 		ILogService Log => Service.CreateLog();
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
@@ -31,12 +28,9 @@ namespace SecurityDashboard.ViewModel
 		OpenFileDialog openFileDialog;
 		SaveFileDialog saveFileDialog;
 		public ObservableCollection<SmokeSensorViewModel> SmokeSensorCollection { get; set; }
-
 		public ObservableCollection<FireSensorViewModel> FireSensorCollection { get; set; }
-
 		public ObservableCollection<CombiSensorViewModel> CombiSensorCollection { get; set; }
 
-		public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
 		/// </summary>
@@ -44,6 +38,8 @@ namespace SecurityDashboard.ViewModel
 		{
 			ServiceConfig.Initialization();
 			FileManager = JSONReader.Create();
+			SeriesCollection = new SeriesCollection();
+			Sensors = new List<SensorViewModel>();
 
 			SmokeSensorCollection = new ObservableCollection<SmokeSensorViewModel>();
 			FireSensorCollection = new ObservableCollection<FireSensorViewModel>();
@@ -53,8 +49,9 @@ namespace SecurityDashboard.ViewModel
 			SaveFile = new RelayCommand(SaveCollection);
 			LoadFile = new RelayCommand(LoadCollection);
 		}
+		public SeriesCollection SeriesCollection { get; set; }
 
-		public List<SensorViewModel> Sensors { get; set; } = new List<SensorViewModel>();
+		public List<SensorViewModel> Sensors { get; set; }
 
 		public RelayCommand Generate { get; set; }
 
@@ -135,19 +132,24 @@ namespace SecurityDashboard.ViewModel
 					SmokeSensorCollection.Add(new SmokeSensorViewModel(item as SmokeSensor));
 					SeriesCollection.Add(BuildChartFor(item as SmokeSensor));
 				}
-				OnPropertyChanged("SeriesCollection");
-				SeriesCollection.Clear();
 
 				collection = GetSensorsOfType<FireSensor>();
 				foreach (var item in collection)
+				{
 					FireSensorCollection.Add(new FireSensorViewModel(item as FireSensor));
+					SeriesCollection.Add(BuildChartFor(item as FireSensor));
+				}
 
 				collection = GetSensorsOfType<CombiSensor>();
 				foreach (var item in collection)
+				{
 					CombiSensorCollection.Add(new CombiSensorViewModel(item as CombiSensor));
+					SeriesCollection.Add(BuildChartFor(item as CombiSensor));
+				}
 
-				
+				OnPropertyChanged("SeriesCollection");
 				OnPropertyChanged("FireSensorCollection");
+				OnPropertyChanged("SmokeSensorCollection");
 				OnPropertyChanged("CombiSensorCollection");
 			}
 			catch (Exception ex)
@@ -169,9 +171,10 @@ namespace SecurityDashboard.ViewModel
 		private ColumnSeries BuildChartFor(Sensor sensor)
 		{
 			CartesianMapper<SensorViewModel> mapper = Mappers.Xy<SensorViewModel>()
-			 .X((item) => 10) // Set interval to 5 minutes
+			 .X((item) => 10) 
 			 .Y(item => 100)
 			 .Fill((item) => item.Temperatures.Max() > 99 ? Brushes.Red : Brushes.Blue);
+			
 
 			var series = new ColumnSeries
 			{
