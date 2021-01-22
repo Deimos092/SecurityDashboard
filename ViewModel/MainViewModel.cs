@@ -127,7 +127,7 @@ namespace SecurityDashboard.ViewModel
 			{
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
-				UpdateCharts();
+				UpdateCharts(); //Строим графики 
 			}
 			catch (Exception ex)
 			{
@@ -184,15 +184,14 @@ namespace SecurityDashboard.ViewModel
 
 		private LineSeries BuildChartFor(Sensor sensor)
 		{
-
 			IEnumerable<ObservablePoint> collection = sensor.Temperatures.Select((x, i) => new ObservablePoint(i++, x));
 
 			var LineSeries = new LineSeries
 			{
 				Values = new ChartValues<ObservablePoint>(collection),
-				PointGeometrySize = 10,
-				Title = sensor.Name,
-				LineSmoothness = 0.5,
+				PointGeometrySize = 10, //Толщина точек
+				Title = sensor.Name, //Имя графика
+				LineSmoothness = 0.5, // Плавность перехода графика от точки к точке
 			};
 			return LineSeries;
 		}
