@@ -15,12 +15,18 @@ namespace SecurityDashboard
 	{
 		private bool clicked = false;
 		private Point lmAbs = new Point();
-
+		private string view = "";
+		
 		public MainWindow()
 		{
 			InitializeComponent();
-			this.DataContext = new MainViewModel();
+			ServiceConfig.Initialization();
+			this.DataContext = new MainViewModel(RichText);
+			view = $"{new string('=',100)}\n{DateTime.Now} : Run {Application.ResourceAssembly.FullName}";
+			Log.WriteLog(view);
+			LogTb.Text += view;
 		}
+
 		/// <summary>
 		/// Create Services for work
 		/// </summary>
@@ -29,6 +35,8 @@ namespace SecurityDashboard
 		/// Gets the exception handler.
 		/// </summary>
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
+
+		public RichTextBox RichText { get; set; }
 
 
 		// ---------------------- Simple methods ----------------------
@@ -90,5 +98,17 @@ namespace SecurityDashboard
 		}
 
 		#endregion
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			view = $"Closed {Application.ResourceAssembly.FullName}\n{new string('=', 100)}\n";
+			Log.WriteLog(view);
+		}
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			view = $"Closing {Application.ResourceAssembly.FullName}\n";
+			Log.WriteLog(view);
+		}
 	}
 }

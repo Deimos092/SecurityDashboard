@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using SecurityDashboard.Model;
 using SecurityDashboard.Utils;
 
@@ -32,14 +33,13 @@ namespace SecurityDashboard.ViewModel
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
 		/// </summary>
-		public MainViewModel()
+		public MainViewModel(RichTextBox richTextBox)
 		{
 			ServiceConfig.Initialization();
 			FileManager = JSONReader.Create();
-			SeriesCollection = new SeriesCollection();
 
 			Sensors = new List<SensorViewModel>();
-
+			
 			SmokeSensorCollection = new SeriesCollection();
 			FireSensorCollection = new SeriesCollection();
 			CombiSensorCollection = new SeriesCollection();
@@ -48,11 +48,10 @@ namespace SecurityDashboard.ViewModel
 			SaveFile = new RelayCommand(SaveCollection);
 			LoadFile = new RelayCommand(LoadCollection);
 		}
-		public SeriesCollection SeriesCollection { get; set; }
 		public SeriesCollection SmokeSensorCollection { get; set; }
 		public SeriesCollection FireSensorCollection { get; set; }
 		public SeriesCollection CombiSensorCollection { get; set; }
-
+		public RichTextBox RichTextBox { get; set; }
 		public List<SensorViewModel> Sensors { get; set; }
 
 		public RelayCommand Generate { get; set; }
