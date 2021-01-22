@@ -24,7 +24,7 @@ namespace SecurityDashboard
 			this.DataContext = new MainViewModel(RichText);
 			view = $"{new string('=',100)}\n{DateTime.Now} : Run {Application.ResourceAssembly.FullName}";
 			Log.WriteLog(view);
-			LogTb.Text += view;
+			//LogTb.Text += view;
 		}
 
 		/// <summary>

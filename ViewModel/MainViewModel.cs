@@ -39,7 +39,7 @@ namespace SecurityDashboard.ViewModel
 			FileManager = JSONReader.Create();
 
 			Sensors = new List<SensorViewModel>();
-			
+
 			SmokeSensorCollection = new SeriesCollection();
 			FireSensorCollection = new SeriesCollection();
 			CombiSensorCollection = new SeriesCollection();
@@ -69,16 +69,16 @@ namespace SecurityDashboard.ViewModel
 				saveFileDialog = new SaveFileDialog();
 				// -----------------------------------
 				saveFileDialog.Filter = "Json file (.json)|*.json|All Files(.*)|*.*";
-				saveFileDialog.FileName = "ѕуть до файла";
+				saveFileDialog.FileName = "DataOfSensors";
 				saveFileDialog.Title = "—охранение данных в файл";
 				saveFileDialog.FilterIndex = 0;
 				// -----------------------------------
 				bool? isOk = saveFileDialog.ShowDialog() ?? false;
 				if (isOk.Value)
 				{
-					List<Sensor> Collection = Sensors.Select(x => x.Sensor).ToList();
-					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
-					FileManager.Save(Collection);
+					FileManager.FilePath = Path.GetDirectoryName(saveFileDialog.FileName);
+					List<Sensor> collection = Sensors.Select(x => x.Sensor).ToList();
+					FileManager.Save(collection);
 				}
 				else
 					throw new Exception("”казан не правильный путь файла");
@@ -108,9 +108,10 @@ namespace SecurityDashboard.ViewModel
 				{
 					Sensors.Clear();
 					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
-					List<Sensor> collection = FileManager.Read(FileManager.FilePath);
 
+					List<Sensor> collection = FileManager.Read(FileManager.FilePath);
 					collection.ForEach(sensor => Sensors.Add(new SensorViewModel(sensor)));
+					UpdateCharts();
 				}
 			}
 			catch (Exception ex)
@@ -126,7 +127,19 @@ namespace SecurityDashboard.ViewModel
 			{
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
-
+				UpdateCharts();
+			}
+			catch (Exception ex)
+			{
+				var log = ExceptionHandler.Handler(ex);
+				Log.WriteLog(log);
+				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+		private void UpdateCharts()
+		{
+			try
+			{
 				var collection = GetSensorsOfType<SmokeSensor>();
 				foreach (var item in collection)
 				{
@@ -148,7 +161,7 @@ namespace SecurityDashboard.ViewModel
 					CombiSensorCollection.Add(series);
 				}
 
-				OnPropertyChanged("SeriesCollection");
+
 				OnPropertyChanged("FireSensorCollection");
 				OnPropertyChanged("SmokeSensorCollection");
 				OnPropertyChanged("CombiSensorCollection");
