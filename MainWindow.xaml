@@ -180,7 +180,7 @@
 						Series="{Binding FireSensorCollection}"
 						Zoom="X">
 						<lvc:CartesianChart.DataTooltip>
-							<lvc:DefaultTooltip Background="#303030" BulletSize="15" />
+							<lvc:DefaultTooltip Background="{DynamicResource MaterialDesignPaper}" BulletSize="15" />
 						</lvc:CartesianChart.DataTooltip>
 					</lvc:CartesianChart>
 
@@ -193,7 +193,7 @@
 						Series="{Binding SmokeSensorCollection}"
 						Zoom="X">
 						<lvc:CartesianChart.DataTooltip>
-							<lvc:DefaultTooltip Background="#303030" BulletSize="15" />
+							<lvc:DefaultTooltip Background="{DynamicResource MaterialDesignPaper}" BulletSize="15" />
 						</lvc:CartesianChart.DataTooltip>
 					</lvc:CartesianChart>
 
@@ -206,7 +206,7 @@
 						Series="{Binding CombiSensorCollection}"
 						Zoom="X">
 						<lvc:CartesianChart.DataTooltip>
-							<lvc:DefaultTooltip Background="#303030" BulletSize="15" />
+							<lvc:DefaultTooltip Background="{DynamicResource MaterialDesignPaper}" BulletSize="15" />
 						</lvc:CartesianChart.DataTooltip>
 					</lvc:CartesianChart>
 

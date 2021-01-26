@@ -14,8 +14,7 @@ namespace SecurityDashboard.Utils
 		private static string Smokename = "Дымовой #";
 		private static string Firename = "Тепловой #";
 		private static string Combiname = "Комбинированый #";
-		private static Random lvl = new Random();
-		private static Random Temp = new Random();
+		
 		/// <summary>
 		/// Generates the sensors.
 		/// </summary>
@@ -24,7 +23,8 @@ namespace SecurityDashboard.Utils
 		public static List<Sensor> GetSensors(int count = 3)
 		{
 			List<Sensor> Collection = new List<Sensor>();
-			
+			Random lvl = new Random();
+		    Random Temp = new Random();
 
 			for (int i = 0; i < count; i++)
 			{
@@ -34,7 +34,7 @@ namespace SecurityDashboard.Utils
 
 				smokeSensor.Temperatures = GenTemperatureFor(smokeSensor, Temp);
 				combiSensor.Temperatures = GenTemperatureFor(combiSensor, Temp);
-				fireSensor.Temperatures = GenTemperatureFor(fireSensor, Temp);
+				 fireSensor.Temperatures = GenTemperatureFor(fireSensor, Temp);
 
 				Collection.Add(smokeSensor);
 				Collection.Add(combiSensor);

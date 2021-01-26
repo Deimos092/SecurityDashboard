@@ -9,7 +9,7 @@ using SecurityDashboard.Utils;
 
 namespace SecurityDashboard.Model
 {
-	public abstract class Sensor : ISensor
+	public abstract class Sensor 
 	{
 		string _name;
 		List<double> _temperatures;

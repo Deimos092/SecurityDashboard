@@ -109,7 +109,6 @@
     <Compile Include="Interfaces\IExceptionHandler.cs" />
     <Compile Include="Interfaces\IJSONReader.cs" />
     <Compile Include="Interfaces\ILogService.cs" />
-    <Compile Include="Interfaces\ISensor.cs" />
     <Compile Include="Model\CombiSensor.cs" />
     <Compile Include="Model\FireSensor.cs" />
     <Compile Include="Model\Sensor.cs" />
