@@ -11,10 +11,11 @@ namespace SecurityDashboard.Utils
 {
 	public class Generator
 	{
-		static string Smokename = "Дымовой #";
-		static string Firename = "Тепловой #";
-		static string Combiname = "Комбинированый #";
-		static Random lvl = new Random();
+		private static string Smokename = "Дымовой #";
+		private static string Firename = "Тепловой #";
+		private static string Combiname = "Комбинированый #";
+		private static Random lvl = new Random();
+		private static Random Temp = new Random();
 		/// <summary>
 		/// Generates the sensors.
 		/// </summary>
@@ -23,7 +24,7 @@ namespace SecurityDashboard.Utils
 		public static List<Sensor> GetSensors(int count = 3)
 		{
 			List<Sensor> Collection = new List<Sensor>();
-			Random Temp = new Random();
+			
 
 			for (int i = 0; i < count; i++)
 			{
@@ -49,7 +50,7 @@ namespace SecurityDashboard.Utils
 		/// </summary>
 		/// <param name="sensor">The sensor.</param>
 		/// <returns>A list of double.</returns>
-		public static List<double> GenTemperatureFor(Sensor sensor, Random temprnd)
+		private static List<double> GenTemperatureFor(Sensor sensor, Random temprnd)
 		{
 			switch (sensor)
 			{

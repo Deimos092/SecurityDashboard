@@ -21,10 +21,7 @@ namespace SecurityDashboard
 		{
 			InitializeComponent();
 			ServiceConfig.Initialization();
-			this.DataContext = new MainViewModel(RichText);
-			view = $"{new string('=',100)}\n{DateTime.Now} : Run {Application.ResourceAssembly.FullName}";
-			Log.WriteLog(view);
-			//LogTb.Text += view;
+			this.DataContext = new MainViewModel();
 		}
 
 		/// <summary>

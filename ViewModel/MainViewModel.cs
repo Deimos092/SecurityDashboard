@@ -16,29 +16,33 @@ using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using System.Windows.Media;
 using LiveCharts.Wpf;
+using System.Text;
 
 namespace SecurityDashboard.ViewModel
 {
 
 	public class MainViewModel : BaseViewModel
 	{
-
+		private StringBuilder logview;
 		ILogService Log => Service.CreateLog();
 		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
 		OpenFileDialog openFileDialog;
 		SaveFileDialog saveFileDialog;
 
-
+		public SeriesCollection SmokeSensorCollection { get; set; }
+		public SeriesCollection FireSensorCollection { get; set; }
+		public SeriesCollection CombiSensorCollection { get; set; }
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
 		/// </summary>
-		public MainViewModel(RichTextBox richTextBox)
+		public MainViewModel()
 		{
 			ServiceConfig.Initialization();
 			FileManager = JSONReader.Create();
 
 			Sensors = new List<SensorViewModel>();
+			logview = new StringBuilder();
 
 			SmokeSensorCollection = new SeriesCollection();
 			FireSensorCollection = new SeriesCollection();
@@ -47,11 +51,20 @@ namespace SecurityDashboard.ViewModel
 			Generate = new RelayCommand(GenerateCollection);
 			SaveFile = new RelayCommand(SaveCollection);
 			LoadFile = new RelayCommand(LoadCollection);
+
+			LogView = $"Services Initialization";
 		}
-		public SeriesCollection SmokeSensorCollection { get; set; }
-		public SeriesCollection FireSensorCollection { get; set; }
-		public SeriesCollection CombiSensorCollection { get; set; }
-		public RichTextBox RichTextBox { get; set; }
+
+		public string LogView
+		{
+			get { return logview.ToString(); }
+			set
+			{
+				if (!string.IsNullOrEmpty(value))
+					logview.AppendLine($"{DateTime.Now} : {value}");
+				OnPropertyChanged("LogView");
+			}
+		}
 		public List<SensorViewModel> Sensors { get; set; }
 
 		public RelayCommand Generate { get; set; }
@@ -79,9 +92,9 @@ namespace SecurityDashboard.ViewModel
 					FileManager.FilePath = Path.GetDirectoryName(saveFileDialog.FileName);
 					List<Sensor> collection = Sensors.Select(x => x.Sensor).ToList();
 					FileManager.Save(collection);
+					LogView = $"Save data to {FileManager.FilePath}";
 				}
-				else
-					throw new Exception("Указан не правильный путь файла");
+				
 			}
 			catch (Exception ex)
 			{
@@ -108,59 +121,53 @@ namespace SecurityDashboard.ViewModel
 				{
 					Sensors.Clear();
 					FileManager.FilePath = Path.GetDirectoryName(openFileDialog.FileName);
+					LogView = $"Load data from {FileManager.FilePath}";
 
 					List<Sensor> collection = FileManager.Read(FileManager.FilePath);
 					collection.ForEach(sensor => Sensors.Add(new SensorViewModel(sensor)));
 					UpdateCharts();
 				}
+
 			}
 			catch (Exception ex)
 			{
 				var log = ExceptionHandler.Handler(ex);
 				Log.WriteLog(log);
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
+				LogView = $"Error! {log}";
 			}
 		}
 		private void GenerateCollection()
 		{
 			try
 			{
+				LogView = $"Generate new Charts";
 				Sensors.Clear();
 				Generator.GetSensors().ForEach(item => Sensors.Add(new SensorViewModel(item)));
-				UpdateCharts(); //Строим графики 
+				UpdateCharts(); //Строим графики 				
 			}
 			catch (Exception ex)
 			{
 				var log = ExceptionHandler.Handler(ex);
 				Log.WriteLog(log);
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
+				LogView = $"Error! {log}";
 			}
 		}
 		private void UpdateCharts()
 		{
 			try
 			{
-				var collection = GetSensorsOfType<SmokeSensor>();
-				foreach (var item in collection)
-				{
-					var series = BuildChartFor(item as SmokeSensor);
-					SmokeSensorCollection.Add(series);
-				}
+				LogView = $"Update Charts";
 
-				collection = GetSensorsOfType<FireSensor>();
-				foreach (var item in collection)
-				{
-					var series = BuildChartFor(item as FireSensor);
-					FireSensorCollection.Add(series);
-				}
+				SmokeSensorCollection.Clear();
+				SmokeSensorCollection.AddRange(GetChartsOfType<SmokeSensor>());
 
-				collection = GetSensorsOfType<CombiSensor>();
-				foreach (var item in collection)
-				{
-					var series = BuildChartFor(item as CombiSensor);
-					CombiSensorCollection.Add(series);
-				}
+				FireSensorCollection.Clear();
+				FireSensorCollection.AddRange(GetChartsOfType<FireSensor>());
 
+				CombiSensorCollection.Clear();
+				CombiSensorCollection.AddRange(GetChartsOfType<CombiSensor>());
 
 				OnPropertyChanged("FireSensorCollection");
 				OnPropertyChanged("SmokeSensorCollection");
@@ -171,7 +178,19 @@ namespace SecurityDashboard.ViewModel
 				var log = ExceptionHandler.Handler(ex);
 				Log.WriteLog(log);
 				MessageBox.Show(log, "Error! ", MessageBoxButton.OK, MessageBoxImage.Error);
+				LogView = $"Error! {log}";
+
 			}
+		}
+		private List<LineSeries> GetChartsOfType<T>()
+		{
+			List<LineSeries> lineSeries = new List<LineSeries>();
+			var collection = GetSensorsOfType<T>();
+
+			foreach (var item in collection)
+				lineSeries.Add(BuildChartFor((Sensor)item));
+
+			return lineSeries;
 		}
 		private List<object> GetSensorsOfType<T>()
 		{
@@ -181,7 +200,6 @@ namespace SecurityDashboard.ViewModel
 				.ToList();
 			return collection;
 		}
-
 		private LineSeries BuildChartFor(Sensor sensor)
 		{
 			IEnumerable<ObservablePoint> collection = sensor.Temperatures.Select((x, i) => new ObservablePoint(i++, x));
@@ -190,7 +208,7 @@ namespace SecurityDashboard.ViewModel
 			{
 				Values = new ChartValues<ObservablePoint>(collection),
 				PointGeometrySize = 10, //Толщина точек
-				Title = sensor.Name, //Имя графика
+				Title = sensor.Name, //Имя датчика
 				LineSmoothness = 0.5, // Плавность перехода графика от точки к точке
 			};
 			return LineSeries;

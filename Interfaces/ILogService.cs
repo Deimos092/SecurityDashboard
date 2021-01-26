@@ -4,7 +4,7 @@ namespace SecurityDashboard.Interfaces
 {
 	public interface ILogService
 	{
-		string FileName { get; set; }
+		string FilePath { get; set; }
 
 		void WriteLog(string source);
 

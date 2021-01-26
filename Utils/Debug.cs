@@ -14,7 +14,6 @@ namespace SecurityDashboard.Utils
 		private const int MaxLine = 1000;
 		private static readonly StringBuilder StringBuilder = new StringBuilder();
 		private static readonly object Obj = new object();
-		private static readonly string _fileName = "LogInfo.txt";
 		private static string _path = string.Empty;
 		private static Debug _instance;
 
@@ -41,23 +40,23 @@ namespace SecurityDashboard.Utils
 		/// Если задано пустое значение или ошибка, то собираться будет по пути
 		/// "C:\Debug (название программы)\LogInfo.txt"
 		/// </summary>
-		public string FileName
+		public string FilePath
 		{
 			get
 			{
 				if (string.IsNullOrEmpty(_path))
-					_path = Path.Combine($@"{Directory.GetCurrentDirectory()}\", _fileName);
+					_path = Path.Combine($@"{Directory.GetCurrentDirectory()}\", FileName);
 				return _path;
 			}
 			set
 			{
 				if (!string.IsNullOrEmpty(_path))
-					_path = string.Format($@"{value}\{_fileName}");
+					_path = string.Format($@"{Path.GetDirectoryName(value)}\{FileName}");
 				else
-					_path = Path.Combine($@"C:\Debug ({AppDomain.CurrentDomain.FriendlyName.Replace(".exe", "")})\", _fileName);
+					_path = Path.Combine($@"C:\Debug ({AppDomain.CurrentDomain.FriendlyName.Replace(".exe", "")})\", FileName);
 			}
 		}
-
+		public string FileName { get; set; } = $"Log {DateTime.Now.ToShortDateString()}.txt";
 
 		//---------------------------------------------------------------------
 		// -------------------------- Методы ----------------------------------
@@ -70,7 +69,9 @@ namespace SecurityDashboard.Utils
 			{
 				Monitor.Enter(Obj, ref lockWasTaken);
 				{
-					File.AppendAllText(FileName, StringBuilder.ToString());
+					if (!File.Exists(FilePath))
+						File.Create(FilePath);
+					File.AppendAllText(FilePath, StringBuilder.ToString());
 				}
 			}
 			finally

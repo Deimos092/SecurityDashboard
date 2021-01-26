@@ -13,12 +13,7 @@ namespace SecurityDashboard.Model
 	{
 		string _name;
 		List<double> _temperatures;
-		ILogService Log => Service.CreateLog();
-		IExceptionHandler ExceptionHandler => Service.CreateExeptionHandler();
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Alarm"/> class.
-		/// </summary>
 		public Sensor()
 		{
 			_name = string.Empty;
